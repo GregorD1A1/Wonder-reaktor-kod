@@ -26,9 +26,11 @@ void setup()
 {
 ClientRequest = "";
 
-Serial.begin(9600);
+Serial.begin(9600); // ustawienie komunikacji szeregowej (jest potrzebna jedynie do debugowania)
 
-pinMode(21, OUTPUT);
+pinMode(21, OUTPUT);  // ustawienie trybu pinu
+
+// podłączenie się do wifi i start serwera
   WiFi.disconnect();
   delay(3000);
   Serial.println("START");
@@ -48,7 +50,7 @@ pinMode(21, OUTPUT);
 
 void loop()
 {
-
+    // przyjęcie requesta od clienta
     client = server.available();
     if (!client) { return; }
     while(!client.available()){  delay(1); }
@@ -68,13 +70,14 @@ void loop()
     client.println("</html>");
     client.stop();
     delay(1);
-    
+
+    // uruchomianie miksera w przypadku odpowiedniego requesta
     if (ClientRequest.equals("program1")) {
       digitalWrite(21,HIGH);
       delay(10000);
       digitalWrite(21,LOW);
 
     }
-    client.flush();
+    client.flush(); // czeka, aż cały bufer zostanie wysłany
 
 }
